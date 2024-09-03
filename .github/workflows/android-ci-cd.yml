@@ -1,0 +1,16 @@
+name: Android Build for WorkFlowDispatch
+
+on: workflow_dispatch
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.inputs.branch }}
+
+      - name: Create APK for Baaz Staff
+        run: echo "hello im ticket-1"

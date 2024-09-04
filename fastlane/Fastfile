@@ -45,7 +45,7 @@ platform :android do
     firebase_app_distribution(
       app: "1:1030095982155:android:d1598ed5483d261ccd87ce",
       testers: "shalini@electorq.com, shalinibhatt6263@gmail.com",
-      groups: "workflow disptach testing",
+      groups: "yoho",
       release_notes: "Testing for ticket: #{branch}",
       firebase_cli_token: "1//0g8CbFtpsckS-CgYIARAAGBASNgF-L9Irbum-4zbkTPPr3JVxc3WlNidSWNUbxXJWV04wUlP1RMdSYR_7j7TTLWdU7H-tRgCGww",
       apk_path: apk_path

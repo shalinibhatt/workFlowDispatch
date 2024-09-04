@@ -64,7 +64,7 @@ jobs:
                   npm install
 
             - name: Adding plugin for Firebase App Distribution
-              run: bundle exec fastlane add_plugin firebase_app_distribution
+              run: fastlane add_plugin firebase_app_distribution
 
             - name: Create APK for Baaz Staff
               run: fastlane android createApk

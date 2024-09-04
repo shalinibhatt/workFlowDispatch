@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1030095982155",
+    "project_id": "workflowdispatch",
+    "storage_bucket": "workflowdispatch.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1030095982155:android:d1598ed5483d261ccd87ce",
+        "android_client_info": {
+          "package_name": "com.workflowdispatch"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC2X3b_BZvj5nD4FIuPUcpT_NNvj0Jfzb0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

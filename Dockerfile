@@ -24,6 +24,7 @@ COPY Gemfile Gemfile.lock ./
 RUN bundle install --jobs 4 --retry 3
 
 # Install Firebase App Distribution plugin
+RUN  bundle install
 RUN fastlane add_plugin firebase_app_distribution
 
 # Copy the rest of the application code

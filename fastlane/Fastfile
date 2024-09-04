@@ -13,13 +13,13 @@ platform :android do
 
     if branch == "master"
       apk_output = gradle(
-        tasks: ["clean", "assembleProductionRelease"],
+        tasks: ["clean", "assembleRelease"],
         project_dir: "android"
       )
 
     elsif branch.start_with?("ticket")
       apk_output = gradle(
-        tasks: ["clean", "assembleStagingRelease"],
+        tasks: ["clean", "assembleRelease"],
         project_dir: 'android',
         properties: {
           "android.injected.version.code" => versionCode,
@@ -29,7 +29,7 @@ platform :android do
 
     elsif branch == "dev"
       apk_output = gradle(
-        tasks: ["clean", "assembleDevRelease"],
+        tasks: ["clean", "assembleRelease"],
         project_dir: "android"
       )
 

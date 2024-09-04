@@ -38,9 +38,6 @@ jobs:
         with:
           ruby-version: 2.6.10
 
-      - name: Install Bundler
-        run: gem install bundler -v '2.2.33'
-
       - name: Cache Ruby gems
         uses: actions/cache@v3
         with:

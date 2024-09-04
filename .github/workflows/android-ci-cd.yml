@@ -1,16 +1,54 @@
-name: Android Build for WorkFlowDispatch
+name: Android Build for Baaz Staff
 
-on: workflow_dispatch
+on:
+    push:
+        branches:
+            - ticket*
+
+    workflow_dispatch:
+        inputs:
+            branch:
+                description: 'Branch to build'
+                required: true
+                default: 'main'
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
+    build:
+        runs-on: ubuntu-latest
 
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-        with:
-          ref: ${{ github.event.inputs.branch }}
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v2
+              with:
+                  ref: ${{ github.event.inputs.branch }}
 
-      - name: Create APK for Baaz Staff
-        run: echo "hello im ticket-1"
+            - name: Set up JDK 11
+              uses: actions/setup-java@v2
+              with:
+                  distribution: "adopt"
+                  java-version: "17.0.10"
+
+            - name: Set up Node.js
+              uses: actions/setup-node@v2
+              with:
+                  node-version: "16.17.1"
+
+            - name: Set up Ruby
+              uses: actions/setup-ruby@v1
+              with:
+                  ruby-version: '2.x'
+
+            - name: Install Fastlane
+              run: gem install fastlane
+
+            - name: Install dependencies
+              run: |
+                  npm install --save-dev jetifier
+                  npx jetifier
+                  npm install
+
+            - name: Adding plugin for Firebase App Distribution
+              run: sudo fastlane add_plugin firebase_app_distribution
+
+            - name: Create APK for Baaz Staff
+              run: fastlane android createApk

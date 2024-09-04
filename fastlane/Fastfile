@@ -1,0 +1,54 @@
+default_platform(:android)
+
+platform :android do
+  desc "Create the APK based on branch type"
+  lane :createApk do
+    branch = ENV['BRANCH_NAME'] || `git rev-parse --abbrev-ref HEAD`.strip
+
+    puts "Current branch: #{branch}"
+
+    apk_output = ""
+
+    versionCode = File.read("../android/app/build.gradle").match(/versionCode\s+(\d+)/)[1].to_i
+
+    if branch == "master"
+      apk_output = gradle(
+        tasks: ["clean", "assembleProductionRelease"],
+        project_dir: "android"
+      )
+
+    elsif branch.start_with?("ticket")
+      apk_output = gradle(
+        tasks: ["clean", "assembleStagingRelease"],
+        project_dir: 'android',
+        properties: {
+          "android.injected.version.code" => versionCode,
+          "android.injected.version.name" => "#{branch}",
+         }
+      )
+
+    elsif branch == "dev"
+      apk_output = gradle(
+        tasks: ["clean", "assembleDevRelease"],
+        project_dir: "android"
+      )
+
+    else
+      UI.user_error!("Unsupported branch: #{branch}")
+    end
+
+    apk_path = Actions.lane_context[SharedValues::GRADLE_APK_OUTPUT_PATH]
+
+    puts "Generated APK path: #{apk_path}"
+    puts "Generated APK version code: #{versionCode}"
+
+    firebase_app_distribution(
+      app: "1:83529347880:android:783518c445a6b5bf49561d",
+      testers: "shalini@electorq.com, shalinibhatt6263@gmail.com",
+      groups: "Runner_testers",
+      release_notes: "Testing for ticket: #{branch}",
+      firebase_cli_token: "1//0g8CbFtpsckS-CgYIARAAGBASNgF-L9Irbum-4zbkTPPr3JVxc3WlNidSWNUbxXJWV04wUlP1RMdSYR_7j7TTLWdU7H-tRgCGww",
+      apk_path: apk_path
+    )
+  end
+end

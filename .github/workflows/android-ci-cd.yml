@@ -66,8 +66,8 @@ jobs:
 
             - name: Adding plugin for Firebase App Distribution
               run: |
-                  fastlane add_plugin firebase_app_distribution
                   bundle install
+                  fastlane add_plugin firebase_app_distribution
 
             - name: Create APK for Baaz Staff
               run: fastlane android createApk

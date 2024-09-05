@@ -40,13 +40,13 @@ jobs:
           npm install
 
       - name: Install Bundler (Ruby is pre-installed)
-        run: gem install bundler -v '~> 2.0'
+        run: sudo gem install bundler -v '~> 2.0'
 
       - name: Install Fastlane using Bundler
-        run: bundle install --path vendor/bundle
+        run: sudo bundle install --path vendor/bundle
 
       - name: Add Firebase App Distribution plugin to Fastlane
-        run: fastlane add_plugin firebase_app_distribution
+        run: sudo fastlane add_plugin firebase_app_distribution
 
       - name: Build APK for Baaz Staff
         run: fastlane android createApk

@@ -15,9 +15,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-
-    container:
-      image: shalini6263/runner01:latest
+    container: shalini6263/runner01:latest
 
     steps:
       - name: Checkout repository

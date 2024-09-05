@@ -23,7 +23,6 @@ RUN apt-get update && apt-get install -y \
     zlib1g-dev \
     nodejs \
     npm \
-    software-properties-common \
     openjdk-17-jdk \
     && rm -rf /var/lib/apt/lists/*
 
@@ -47,11 +46,6 @@ WORKDIR /app
 
 # Copy the application code
 COPY . .
-
-# Install npm dependencies
-RUN npm install --save-dev jetifier && \
-    npx jetifier && \
-    npm install
 
 # Install Ruby dependencies and Fastlane plugin
 RUN bundle install && \

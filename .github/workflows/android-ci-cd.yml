@@ -1,10 +1,6 @@
 name: Android Build for Baaz Staff
 
 on:
-  push:
-    branches:
-      - ticket*
-
   workflow_dispatch:
     inputs:
       branch:
@@ -22,22 +18,28 @@ jobs:
         with:
           ref: ${{ github.event.inputs.branch }}
 
-      - name: Set up JDK 17 (pre-installed)
+      - name: Set up JDK 11 (pre-installed)
         uses: actions/setup-java@v2
         with:
-          distribution: "adopt"
-          java-version: "17"  # Using '17' since it's pre-installed
+          distribution: 'zulu'
+          java-version: '11' # Using '11' since it's pre-installed
 
       - name: Set up Node.js (pre-installed)
         uses: actions/setup-node@v2
         with:
-          node-version: "16"  # Pre-installed version is '16'
+          node-version: '16' # Pre-installed version is '16'
 
       - name: Install dependencies
         run: |
           npm install --save-dev jetifier
           npx jetifier
           npm install
+
+      - name: Install Bundler (Ruby is pre-installed)
+        run: sudo gem install bundler -v '~> 2.0'
+
+      - name: Install Fastlane using Bundler
+        run: sudo bundle install --path vendor/bundle
 
       - name: Add Firebase App Distribution plugin to Fastlane
         run: sudo fastlane add_plugin firebase_app_distribution

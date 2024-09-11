@@ -4,6 +4,12 @@ platform :android do
   desc "Create the APK based on branch type"
   lane :createApk do
     branch = ENV['BRANCH_NAME'] || `git rev-parse --abbrev-ref HEAD`.strip
+    commit_message = `git log -1 --pretty=%B`.strip
+
+    puts commit_message
+
+    version_name_match = commit_message.match(/version (\d+\.\d+\.\d+)/)
+    version_code_match = commit_message.match(/(\d+)/)
 
     puts "Current branch: #{branch}"
 

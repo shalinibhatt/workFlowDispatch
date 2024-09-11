@@ -51,4 +51,19 @@ platform :android do
       apk_path: apk_path
     )
   end
+
+    lane :slack_webhook do
+      slack(
+        slack_url:"https://hooks.slack.com/services/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",
+  message: "App successfully released!",
+  success: true,        # Optional, defaults to true.
+  payload: {  # Optional, lets you specify any number of your own Slack attachments.
+    "Build Date" => Time.new.to_s,
+    "Built by" => "Jenkins",
+  },
+  default_payloads: [:git_branch, :git_author], # Optional, lets you specify default payloads to include. Pass an empty array to suppress all the default payloads.
+  
+)
+    end
+
 end

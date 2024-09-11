@@ -18,6 +18,12 @@ jobs:
         with:
           ref: ${{ github.event.inputs.branch }}
 
+      - name: Print commit message
+        run: |
+           git fetch origin ${{ github.event.inputs.branch }}
+           LAST_COMMIT_MESSAGE=$(git log -1 --pretty=%B)
+           echo "Commit message: $LAST_COMMIT_MESSAGE"
+
       - name: Set up JDK 11 (pre-installed)
         uses: actions/setup-java@v2
         with:

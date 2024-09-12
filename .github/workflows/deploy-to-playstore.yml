@@ -1,0 +1,58 @@
+name: Deploy to Play Store
+
+on:
+  workflow_call:
+
+jobs:
+  production-build-and-deploy:
+    if: github.event.inputs.branch == 'main'
+    runs-on: ubuntu-latest
+    environment: production
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.inputs.branch }}
+
+      - name: Set up JDK 11 (pre-installed)
+        uses: actions/setup-java@v2
+        with:
+          distribution: 'zulu'
+          java-version: '11'
+
+      - name: Set up Node.js (pre-installed)
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+
+      - name: Install dependencies
+        run: |
+          npm install --save-dev jetifier
+          npx jetifier
+          npm install
+
+      - name: Install Bundler
+        run: sudo gem install bundler -v '~> 2.0'
+
+      - name: Install Fastlane using Bundler
+        run: sudo bundle install --path vendor/bundle
+
+      - name: Set USERS_ALLOWED_TO_RUN_THE_PIPELINE
+        env:
+          USERS_ALLOWED_TO_RUN_THE_PIPELINE: ${{ vars.USERS_ALLOWED_TO_DEPLOY_IN_PROTECTED_BRANCH }}
+        run: |
+          echo "Checking if actor is allowed to run the pipeline..."
+          ACTOR="${{ github.actor }}"
+          USERS_ARRAY=$(echo $USERS_ALLOWED_TO_RUN_THE_PIPELINE | jq -r '.users_info[]')
+
+          if echo "$USERS_ARRAY" | grep -q "^$ACTOR$"; then
+              echo "Actor $ACTOR is allowed to run the pipeline."
+          else
+              echo "Actor $ACTOR is not allowed to run the pipeline."
+              exit 1
+          fi
+
+      - name: Build and Deploy to Production Environment
+        if: success()
+        run: echo "Playstore deployed"

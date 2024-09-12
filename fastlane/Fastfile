@@ -11,31 +11,10 @@ platform :android do
     apk_output = ""
 
     if branch == "main"
-      puts commit_message
-
-      version_name_match = commit_message.match(/(\d+\.\d+\.\d+)/)
-      version_code_match = commit_message.match(/\((\d+)\)/)
-  
-      version_name = version_name_match ? version_name_match[1] : "default_version_name"
-      version_code = version_code_match ? version_code_match[1] : "default_version_code"
-  
-    increment_version_code()
-    increment_version_name(
-      gradle_file_path: "./android/app/build.gradle",
-    version_name: version_name)
-    sh(" git config --global user.email 'shalinibhatt6263@gmail.com'")
-sh("git config --global user.name 'shalinibhatt'")
-   
-    
-    sh("git add ../android/app/build.gradle")
-    sh("git commit -m 'Incremented version to #{version_name} (#{version_code})'")
-    sh("git push origin #{branch}")
-    
-      apk_output = gradle(
+        apk_output = gradle(
         tasks: ["clean", "assembleRelease"],
         project_dir: "android"
       )
-
 
 
     elsif branch.start_with?("ticket")

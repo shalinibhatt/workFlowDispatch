@@ -5,37 +5,17 @@
     
     
       
-      <testcase classname="fastlane.lanes" name="0: default_platform" time="0.000213">
+      <testcase classname="fastlane.lanes" name="0: default_platform" time="0.000187">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="1: increment_version_code" time="0.223374">
+      <testcase classname="fastlane.lanes" name="1: clean assembleRelease" time="22.245216">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="2: increment_version_name" time="0.000768">
-        
-      </testcase>
-    
-      
-      <testcase classname="fastlane.lanes" name="3: git add ../android/app/build.gradle" time="0.013918">
-        
-      </testcase>
-    
-      
-      <testcase classname="fastlane.lanes" name="4: git commit -m &apos;Incremented version to 0.9.0 (80)&apos;" time="0.043993">
-        
-      </testcase>
-    
-      
-      <testcase classname="fastlane.lanes" name="5: git push origin main" time="2.957627">
-        
-      </testcase>
-    
-      
-      <testcase classname="fastlane.lanes" name="6: clean assembleRelease" time="5.402366">
+      <testcase classname="fastlane.lanes" name="2: firebase_app_distribution" time="14.395703">
         
       </testcase>
     

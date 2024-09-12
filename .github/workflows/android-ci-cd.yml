@@ -20,9 +20,9 @@ jobs:
 
       - name: Print commit message
         run: |
-           git fetch origin ${{ github.event.inputs.branch }}
-           LAST_COMMIT_MESSAGE=$(git log -1 --pretty=%B)
-           echo "Commit message: $LAST_COMMIT_MESSAGE"
+          git fetch origin ${{ github.event.inputs.branch }}
+          LAST_COMMIT_MESSAGE=$(git log -1 --pretty=%B)
+          echo "Commit message: $LAST_COMMIT_MESSAGE"
 
       - name: Set up JDK 11 (pre-installed)
         uses: actions/setup-java@v2
@@ -46,6 +46,12 @@ jobs:
 
       - name: Install Fastlane using Bundler
         run: sudo bundle install --path vendor/bundle
+
+      - name: Add plugins for version management (master only)
+        if: github.event.inputs.branch == 'master'
+        run: |
+          sudo fastlane add_plugin increment_version_code
+          sudo fastlane add_plugin increment_version_name
 
       - name: Add Firebase App Distribution plugin to Fastlane
         run: sudo fastlane add_plugin firebase_app_distribution

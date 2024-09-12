@@ -16,7 +16,6 @@ platform :android do
       version_name_match = commit_message.match(/(\d+\.\d+\.\d+)/)
       version_code_match = commit_message.match(/\((\d+)\)/)
   
-      # Provide default values if no matches are found
       version_name = version_name_match ? version_name_match[1] : "default_version_name"
       version_code = version_code_match ? version_code_match[1] : "default_version_code"
   
@@ -24,6 +23,10 @@ platform :android do
     increment_version_name(
       gradle_file_path: "./android/app/build.gradle",
     version_name: version_name)
+    sh(" git config --global user.email 'shalinibhatt6263@gmail.com'")
+sh("git config --global user.name 'shalinibhatt'")
+   
+    
     sh("git add ../android/app/build.gradle")
     sh("git commit -m 'Incremented version to #{version_name} (#{version_code})'")
     sh("git push origin #{branch}")

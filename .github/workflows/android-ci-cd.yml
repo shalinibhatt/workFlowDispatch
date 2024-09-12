@@ -49,7 +49,7 @@ jobs:
         run: sudo bundle install --path vendor/bundle
 
       - name: Add plugins for version management (main only)
-        if: github.event.inputs.branch == 'main' && github.actor == 'shaliniele6263'
+        if: github.event.inputs.branch == 'main' && github.actor == 'shalinibhatt'
         run: |
           sudo fastlane add_plugin increment_version_code
           sudo fastlane add_plugin increment_version_name

@@ -10,7 +10,7 @@ platform :android do
 
     apk_output = ""
 
-    if branch == "master"
+    if branch == "main"
       puts commit_message
 
       version_name_match = commit_message.match(/(\d+\.\d+\.\d+)/)
@@ -24,10 +24,16 @@ platform :android do
     increment_version_name(
       gradle_file_path: "./android/app/build.gradle",
     version_name: version_name)
+    sh("git add ../android/app/build.gradle")
+    sh("git commit -m 'Incremented version to #{version_name} (#{version_code})'")
+    sh("git push origin #{branch}")
+    
       apk_output = gradle(
         tasks: ["clean", "assembleRelease"],
         project_dir: "android"
       )
+
+
 
     elsif branch.start_with?("ticket")
       apk_output = gradle(

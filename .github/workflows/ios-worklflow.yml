@@ -1,4 +1,4 @@
-name: Android Build for Baaz Staff
+name: IOS Build for Baaz Staff
 
 on:
   workflow_dispatch:
@@ -21,7 +21,4 @@ jobs:
         if: startsWith(github.event.inputs.branch, 'main') || github.event.inputs.branch == 'main'
         uses: ./.github/workflows/distribute-to-firebase.yml
 
-  release-aab-to-play-store:
-    if: startsWith(github.ref_name, 'main')
-    uses: ./.github/workflows/deploy-to-playstore.yml
 

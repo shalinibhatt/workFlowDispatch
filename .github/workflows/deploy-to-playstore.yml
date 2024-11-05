@@ -48,18 +48,24 @@ jobs:
           npx jetifier
           npm install
 
+      - name: Set up Ruby 2.7.6
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '2.7.6'
+
       - name: Install Bundler
-        run: sudo gem install bundler -v '~> 2.0'
+        run:  gem install bundler -v '2.1.4'
 
       - name: Install Fastlane using Bundler
-        run: sudo bundle install --path vendor/bundle
+        run:  bundle install
 
       - name: Adding plugin for Firebase App Distribution
-        run: sudo fastlane add_plugin firebase_app_distribution
+        run: bundle exec fastlane add_plugin firebase_app_distribution
 
       - name: Build and Deploy to Production Environment
+        run:  bundle exec fastlane playstoreInternal
         env:
           USER_EMAIL: ${{ github.actor_id }}
           USER_NAME: ${{ github.actor }}
-        run: |
-          fastlane playstoreInternal
+          ALLOWED_USERS: ${{vars.USERS_ALLOWED_TO_DEPLOY_IN_PROTECTED_BRANCH}}
+

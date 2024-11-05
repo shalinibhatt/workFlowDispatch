@@ -1,12 +1,18 @@
 require_relative "VersionIncrement"
 default_platform(:android)
 branch = ENV['BRANCH_NAME'] || `git rev-parse --abbrev-ref HEAD`.strip
+environment = ENV['BUILD_TYPE'] || "bhakenv"
+users= ENV['ALLOWED_USERS']
+username = ENV['USER_NAME']
 
 platform :android do
   desc "Create the APK based on branch type"
   lane :createApk do
 
-    puts "Current branch: #{branch}"
+  puts "Build environment: #{environment}"
+  puts "Current branch: #{users}"  
+  puts "Current branch: #{username}"
+  puts "Current branch: #{branch}"
 
 
     if branch == "main"
@@ -50,7 +56,10 @@ platform :android do
   lane :playstoreInternal do
     user_email = ENV['USER_NAME'] || `git config user.name`.strip
     user_name = ENV['USER_EMAIL'] ||  `git config user.name`.strip
-
+    puts "Build environment: #{environment}"
+    puts "Current branch: #{users}"  
+    puts "Current branch: #{username}"
+    puts "Current branch: #{branch}"
     puts "this is the name and email of the user #{user_email} #{user_name}"
   
     sh("git config --global user.email '#{user_email}'")

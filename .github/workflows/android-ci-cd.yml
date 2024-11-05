@@ -9,10 +9,8 @@ on:
         default: 'main'
 
 jobs:
-  test-APK-build-and-distribute:
-    if: startsWith(github.event.inputs.branch, 'ticket-') || github.event.inputs.branch == 'dev'
+  release-apk-to-firebase-app-distribution:
     uses: ./.github/workflows/distribute-to-firebase.yml
 
-  production-build-and-deploy:
-    if: github.event.inputs.branch == 'main'
+  release-aab-to-play-store:
     uses: ./.github/workflows/deploy-to-playstore.yml

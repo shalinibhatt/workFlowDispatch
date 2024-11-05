@@ -1,9 +1,10 @@
+require_relative "VersionIncrement"
 default_platform(:android)
+branch = ENV['BRANCH_NAME'] || `git rev-parse --abbrev-ref HEAD`.strip
 
 platform :android do
   desc "Create the APK based on branch type"
   lane :createApk do
-    branch = ENV['BRANCH_NAME'] || `git rev-parse --abbrev-ref HEAD`.strip
     commit_message = `git log -1 --pretty=%B`.strip
 
     puts "Current branch: #{branch}"
@@ -47,18 +48,45 @@ platform :android do
     )
   end
 
-    lane :slack_webhook do
-      slack(
-        slack_url:"https://hooks.slack.com/services/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",
-  message: "App successfully released!",
-  success: true,        # Optional, defaults to true.
-  payload: {  # Optional, lets you specify any number of your own Slack attachments.
-    "Build Date" => Time.new.to_s,
-    "Built by" => "Jenkins",
-  },
-  default_payloads: [:git_branch, :git_author], # Optional, lets you specify default payloads to include. Pass an empty array to suppress all the default payloads.
+  desc "Build and upload the app to the Play Store for internal testing release"
+  lane :playstoreInternal do |options|
+    user_email = options[:git_user_email] || 'default@example.com'
+    user_name = options[:git_user_name] || 'Default Name'
+  puts "this is the name and email of the user #{user_email} #{user_name}"
   
-)
-    end
+    sh("git config --global user.email '#{user_email}'")
+    sh("git config --global user.name '#{user_name}'")
+    
+  gradle_file_path = "../android/app/build.gradle"
 
+  android_increment_my_version_code_and_name
+  
+  version_code = File.read(gradle_file_path).match(/versionCode\s+(\d+)/)[1]
+  version_name = File.read(gradle_file_path).match(/versionName\s+"(.+?)"/)[1]
+
+
+  project_dir = 'android'
+  gradle(
+  task: "clean",
+  project_dir: project_dir
+  )
+
+  gradle(
+    task: 'bundle',
+    project_dir: project_dir,
+    build_type: 'Debug',
+  )
+
+  aab_path =  Actions.lane_context[SharedValues::GRADLE_AAB_OUTPUT_PATH]
+
+  if aab_path.nil?
+    UI.message ".AAB generated"
+  else
+    UI.message ".AAB not generated"
+
+  git_add(path:File.absolute_path("../android/app/build.gradle"))
+  git_commit(path:File.absolute_path("../android/app/build.gradle"),message: "Version Bump in #{branch}. Updated with version code: #{version_code} and version name: #{version_name}")
+  push_to_git_remote
+  end
+end
 end

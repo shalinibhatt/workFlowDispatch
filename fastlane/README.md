@@ -23,13 +23,13 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 
 Create the APK based on branch type
 
-### android slack_webhook
+### android playstoreInternal
 
 ```sh
-[bundle exec] fastlane android slack_webhook
+[bundle exec] fastlane android playstoreInternal
 ```
 
-
+Build and upload the app to the Play Store for internal testing release
 
 ----
 

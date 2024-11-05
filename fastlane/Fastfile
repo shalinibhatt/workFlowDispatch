@@ -5,27 +5,25 @@ branch = ENV['BRANCH_NAME'] || `git rev-parse --abbrev-ref HEAD`.strip
 platform :android do
   desc "Create the APK based on branch type"
   lane :createApk do
-    commit_message = `git log -1 --pretty=%B`.strip
 
     puts "Current branch: #{branch}"
 
-    apk_output = ""
 
     if branch == "main"
-        apk_output = gradle(
+        gradle(
         tasks: ["clean", "assembleRelease"],
         project_dir: "android"
       )
 
 
     elsif branch.start_with?("ticket")
-      apk_output = gradle(
+        gradle(
         tasks: ["clean", "assembleRelease"],
         project_dir: 'android'
       )
 
     elsif branch == "dev"
-      apk_output = gradle(
+        gradle(
         tasks: ["clean", "assembleRelease"],
         project_dir: "android"
       )
@@ -49,10 +47,11 @@ platform :android do
   end
 
   desc "Build and upload the app to the Play Store for internal testing release"
-  lane :playstoreInternal do |options|
-    user_email = options[:git_user_email] || 'default@example.com'
-    user_name = options[:git_user_name] || 'Default Name'
-  puts "this is the name and email of the user #{user_email} #{user_name}"
+  lane :playstoreInternal do
+    user_email = ENV['USER_NAME'] || `git config user.name`.strip
+    user_name = ENV['USER_EMAIL'] ||  `git config user.name`.strip
+
+    puts "this is the name and email of the user #{user_email} #{user_name}"
   
     sh("git config --global user.email '#{user_email}'")
     sh("git config --global user.name '#{user_name}'")

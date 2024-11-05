@@ -19,6 +19,7 @@ jobs:
           USERS_ARRAY=$(echo $USERS_ALLOWED_TO_RUN_THE_PIPELINE | jq -r '.users_info[]')
 
           if echo "$USERS_ARRAY" | grep -q "^$ACTOR$"; then
+              echo "Actor id is ${{github.actor_id}} and ${{github.actor}}"
               echo "Actor $ACTOR is allowed to run the pipeline."
           else
               echo "Actor $ACTOR is not allowed to run the pipeline."
@@ -53,6 +54,12 @@ jobs:
       - name: Install Fastlane using Bundler
         run: sudo bundle install --path vendor/bundle
 
+      - name: Adding plugin for Firebase App Distribution
+        run: sudo fastlane add_plugin firebase_app_distribution
+
       - name: Build and Deploy to Production Environment
-        if: success()
-        run: fastlane playstoreInternal
+        env:
+          USER_EMAIL: ${{ github.actor_id }}
+          USER_NAME: ${{ github.actor }}
+        run: |
+          fastlane playstoreInternal
